@@ -2,13 +2,16 @@ version: "3.9"
 
 services:
   api:
-    build: .
-    container_name: solar-fastapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: "8010"
+      DATABASE_URL: "sqlite:////data/solar_telemetry.db"
     ports:
-      - "8010:8001"
+      - "8010:8010"
     volumes:
-      - .:/app
-      - sqlite_data:/app
+      - sqlite_data:/data
     restart: always
 
 volumes:
