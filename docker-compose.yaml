@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: solar-fastapi
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+      - sqlite_data:/app
+    restart: always
+
+volumes:
+  sqlite_data:
