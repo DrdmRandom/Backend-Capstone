@@ -5,7 +5,7 @@ services:
     build: .
     container_name: solar-fastapi
     ports:
-      - "8001:8010"
+      - "8010:8001"
     volumes:
       - .:/app
       - sqlite_data:/app
