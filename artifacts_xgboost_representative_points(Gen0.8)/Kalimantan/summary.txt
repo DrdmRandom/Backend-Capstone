@@ -1,0 +1,12 @@
+Region           : Kalimantan
+Artifact dir     : C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Kalimantan
+Raw rows         : 52632
+Rows after y drop: 52608
+Dropped y missing: 24
+Train rows       : 36792
+Val rows         : 7884
+Test rows        : 7884
+RMSE all horizon : 57.435593
+MAE all horizon  : 28.375687
+R2 all horizon   : 0.952069
+MAPE all horizon : 22.005230%

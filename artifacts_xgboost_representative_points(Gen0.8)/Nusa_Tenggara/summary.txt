@@ -1,0 +1,12 @@
+Region           : Nusa Tenggara
+Artifact dir     : C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Nusa_Tenggara
+Raw rows         : 52632
+Rows after y drop: 52608
+Dropped y missing: 24
+Train rows       : 36792
+Val rows         : 7884
+Test rows        : 7884
+RMSE all horizon : 56.428558
+MAE all horizon  : 25.944885
+R2 all horizon   : 0.964876
+MAPE all horizon : 16.509069%

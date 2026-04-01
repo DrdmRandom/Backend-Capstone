@@ -1,0 +1,8 @@
+region_name,status,rmse_all_horizon,mae_all_horizon,r2_all_horizon,mape_all_horizon_pct,train_rows,val_rows,test_rows,artifact_dir
+Sumatra,success,66.00027465820312,32.2373046875,0.9390832185745239,25.619298934936523,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Sumatra
+Jawa,success,61.49138259887695,29.905996322631836,0.9468046426773071,23.50255012512207,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Jawa
+Kalimantan,success,57.43559265136719,28.375686645507812,0.9520689249038696,22.005229949951172,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Kalimantan
+Sulawesi,success,59.32278060913086,28.65243911743164,0.9527007341384888,21.24152374267578,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Sulawesi
+Nusa Tenggara,success,56.428558349609375,25.94488525390625,0.9648758769035339,16.509069442749023,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Nusa_Tenggara
+Maluku,success,77.13478088378906,37.786170959472656,0.919141948223114,30.68152618408203,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Maluku
+Papua,success,48.60044479370117,24.197757720947266,0.9596124887466431,18.52165985107422,36792,7884,7884,C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Papua

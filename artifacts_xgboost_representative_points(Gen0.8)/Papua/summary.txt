@@ -1,0 +1,12 @@
+Region           : Papua
+Artifact dir     : C:\Users\rohman\AI-Model\artifacts_xgboost_representative_points(Gen0.8)\Papua
+Raw rows         : 52632
+Rows after y drop: 52608
+Dropped y missing: 24
+Train rows       : 36792
+Val rows         : 7884
+Test rows        : 7884
+RMSE all horizon : 48.600445
+MAE all horizon  : 24.197758
+R2 all horizon   : 0.959612
+MAPE all horizon : 18.521660%
