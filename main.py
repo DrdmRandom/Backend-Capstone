@@ -89,6 +89,11 @@ def create_lag_features(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def utc_to_region_local(ts: pd.Timestamp, region_name: str) -> datetime.datetime:
+    offset = REGION_TIME_OFFSETS.get(region_name, 0)
+    return (ts.to_pydatetime() + datetime.timedelta(hours=offset)).replace(tzinfo=None)
+
+
 # ==========================================
 # TASK 1: HEALTH CHECK ENDPOINT
 # ==========================================
@@ -145,7 +150,7 @@ async def get_forecast(request: ForecastRequest, db: Session = Depends(get_db)):
         medians = preprocessor["train_feature_medians"]
         
         # referensi OpenMeteo
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={coords['lat']}&longitude={coords['lon']}&past_days=2&forecast_days=2&hourly=shortwave_radiation,cloud_cover,temperature_2m,relative_humidity_2m,surface_pressure,direct_radiation&timezone=Asia%2FJakarta"
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={coords['lat']}&longitude={coords['lon']}&past_days=2&forecast_days=2&hourly=shortwave_radiation,cloud_cover,temperature_2m,relative_humidity_2m,surface_pressure,direct_radiation&timezone=UTC"
         
         async with httpx.AsyncClient() as client:
             resp = await client.get(url)
@@ -154,7 +159,7 @@ async def get_forecast(request: ForecastRequest, db: Session = Depends(get_db)):
             om_data = resp.json()
 
         df = pd.DataFrame(om_data["hourly"])
-        df["datetime"] = pd.to_datetime(df["time"])
+        df["datetime"] = pd.to_datetime(df["time"], utc=True)
         df["ALLSKY_SFC_SW_DWN"] = df["shortwave_radiation"]
         df["CLOUD_AMT"] = df["cloud_cover"]
         df["T2M"] = df["temperature_2m"]
@@ -167,9 +172,9 @@ async def get_forecast(request: ForecastRequest, db: Session = Depends(get_db)):
         df_processed = create_time_features(df, region)
         df_processed = create_lag_features(df_processed)
         
-        now_str = datetime.datetime.now().strftime("%Y-%m-%dT%H:00")
-        current_rows = df_processed[df_processed["time"].str.startswith(now_str)]
-        
+        current_time_utc = datetime.datetime.now(datetime.timezone.utc).replace(minute=0, second=0, microsecond=0)
+        current_rows = df_processed[df_processed["datetime"] == pd.Timestamp(current_time_utc)]
+
         if current_rows.empty:
             last_row = df_processed.iloc[[-1]].copy()
             current_index = len(df_processed) - 24 # Fallback
@@ -188,10 +193,10 @@ async def get_forecast(request: ForecastRequest, db: Session = Depends(get_db)):
         model_prediction = []
         openmeteo_reference = []
         
-        now = datetime.datetime.now()
-        
         for i, model in enumerate(models_24_hours):
-            target_time = now + datetime.timedelta(hours=i+1)
+            forecast_row_index = current_index + i + 1
+            forecast_time_utc = df.iloc[forecast_row_index]["datetime"]
+            target_time = utc_to_region_local(forecast_time_utc, region)
             iso_time = target_time.strftime("%Y-%m-%dT%H:00:00")
             forecast_hours.append(iso_time)
             
@@ -203,7 +208,7 @@ async def get_forecast(request: ForecastRequest, db: Session = Depends(get_db)):
             
             # Referensi OpenMeteo murni
             try:
-                om_ref = float(df.iloc[current_index + i + 1]["shortwave_radiation"])
+                om_ref = float(df.iloc[forecast_row_index]["shortwave_radiation"])
             except:
                 om_ref = 0.0
             openmeteo_reference.append(round(om_ref, 4))
